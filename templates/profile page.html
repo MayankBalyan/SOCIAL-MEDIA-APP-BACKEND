@@ -1,0 +1,40 @@
+{% extends "base.html" %} {% block body %}
+
+<div class="profile-container">
+  <!-- Profile Header -->
+  <div class="profile-header">
+    <img src="/media/{{profile.image}}" alt="Profile Picture" />
+    <div class="profile-info">
+      <h2>{{profile.user.first_name}}{{profile.user.last_name}}</h2>
+      <div style='display:flex; flex-direction:row;gap:10;'>
+        <h3 style='align-content:center; margin-right:10px'>@{{profile.username}}</h3>
+ {% if user_info != profile.user %}       
+<form method="get" action="/follow/{{profile.username}}">
+   {% csrf_token %}
+   {% if request.user.userprofile in profile.followers.all %}
+        <button class="btn btn-primary" for="create-post">Unfollow</button>
+{% else %}
+        <button class="btn btn-primary" for="create-post">Follow</button>
+        {% endif %}
+</form>
+{% endif %}
+      </div>
+      <div class="bio">{{profile.bio}}</div>
+        <div style='gap:10px;'><strong>{{ profile.followers.count }}</strong> Followers
+ <strong>{{ profile.following.count }}</strong> Following</div>
+    </div>
+  </div>
+  {% if user_info == profile.user %}
+  <a href='/edit-profile' style='text-decoration:none;color:inherit;'><button class=" btn btn-primary" style='margin:10px 0'>Edit Profile</button></a>
+  {% endif %}
+  <div class="profile-grid">
+    {% for i in post %}
+
+    <div class="grid-item"><a href='/post/{{i.slug}}' style='text-decoration:none; color:inherit;'><img src="/media/{{i.image}}"  /></a></div>
+    {% endfor %}
+
+    <!-- Add more grid-item divs as needed -->
+  </div>
+</div>
+
+{% endblock body %}

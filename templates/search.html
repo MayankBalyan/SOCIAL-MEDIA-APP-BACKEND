@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Search Page{% endblock title %}
+{% block searchbar %}<div class="search-bar">
+            <i class="uil uil-search"></i>
+            <form onsubmit="handleSearch(event)" method='GET' action='/search' >
+            <input
+            type="text"
+            placeholder="Search for creators, inspirations and projects"
+            name="query"
+            id="query"
+            required
+          />
+        </div>{% endblock searchbar %}
+{% block body %}
+<div class="profile-container">
+    <h1 style='margin:15px;'>Search results :</h1>
+
+    {% if post %}
+    {% else %}
+    
+    <p>No search results</p>
+    Your search query : <b>{{query}}</b> did not match any documents. <br>
+    Suggestions:
+    <ul>
+    <li>Make sure that all words are spelled correctly.</li>
+    <li>Try more general keywords.</li>
+   <li> Try fewer keywords.</li>
+   <li> Try different keywords.</li>
+    </li>
+    </ul>
+    {% endif %}
+    <div class="profile-grid">
+
+    {% for i in post %}
+
+    <div class="grid-item"><a href='/post/{{i.slug}}' style='text-decoration:none; color:inherit;'><img src="/media/{{i.image}}"  /></a></div>
+    {% endfor %}
+
+    <!-- Add more grid-item divs as needed -->
+  </div>
+</div>
+{% endblock body %}

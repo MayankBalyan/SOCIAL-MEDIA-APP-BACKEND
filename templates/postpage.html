@@ -1,0 +1,163 @@
+{% extends "base.html" %} {% load humanize %} {% block body %} {% load extras %}
+<div class="post-detail-wrapper">
+  <!-- Post Image -->
+  <div class="post-detail-image-box">
+    <img src="/media/{{post.image}}" alt="Post Image" />
+  </div>
+
+  <!-- Post Info -->
+  <div class="post-detail-content">
+    <div class="post-detail-user">
+      <img src="/media/{{post.author.image}}" alt="User Pic" />
+      <div class="post-detail-username">@ {{post.author.username}}</div>
+    </div>
+
+
+      <form action="/like/{{ post.slug }}/" method="POST">
+  {% csrf_token %}
+  {% if user in post.likes.all %}
+    <button type="submit" class="liked"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
+</svg> {{ post.total_likes }}</button>
+  {% else %}
+    <button type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+  <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"/>
+</svg> {{ post.total_likes }}</button>
+  {% endif %}
+</form>
+
+
+
+
+
+
+    <div class="post-detail-caption">{{post.caption}}</div>
+    <button class="view-comments-btn" onclick="toggleCommentPopup()">
+      View Comments
+    </button>
+
+    <div class="post-detail-date">Posted {{post.created_at|naturaltime}}</div>
+  </div>
+</div>
+
+<!-- Comment Popup -->
+<div class="comment-popup-overlay" id="commentPopup">
+  <div class="comment-popup">
+    <span class="close-btn" onclick="toggleCommentPopup()">&times;</span>
+
+    <h3 class="popup-title">Comments</h3>
+
+    <!-- Scrollable Comments -->
+    <div class="popup-comments-list">
+      {% for i in comments %}
+      <div class="popup-comment">
+        <img src="/media/{{i.user.userprofile.image}}" alt="User" />
+        <div>
+          <strong>@{{i.user.username}}</strong> {{i.comment}}
+          <div class="comment-meta">
+            <span class="comment-time">{{i.created_at|naturaltime}}</span>
+          </div>
+          <div class="comment-actions">
+            <button class="reply-btn" onclick="showReplyInput(this)">
+              Reply
+            </button>
+          </div>
+
+          <!-- Hidden reply input -->
+          <div class="reply-input-wrapper" style="display: none">
+            <form method="POST" action="/postComment">
+              {% csrf_token %}
+              <input
+                type="text"
+                class="reply-input"
+                name="comment"
+                placeholder="Reply to @{{i.user.username}}"
+              />
+              <input type="hidden" name="parentSno" value="{{i.sno}}" />
+              <input type="hidden" name="postSno" value="{{post.sno}}" /><input
+                type="hidden"
+                id="postslug"
+                name="postslug"
+                value="{{post.slug}}"
+              />
+              <button class="send-reply-btn" type="submit">Post</button>
+            </form>
+          </div>
+
+          <div class="replies-container">
+            {% for reply in replyDict|get_val:i.sno %}
+            <!-- Reply example -->
+             
+             
+            <div class="single-reply">
+              <div style='display:flex;flex-direction:row;'>
+              <img
+              src="/media/{{reply.user.userprofile.image}}"
+              alt="User"
+            />
+              <div style='align-content:center;margin-left:3px;'><strong>@{{reply.user.username}}</strong> {{reply.comment}}</div>
+              </div>
+              <div class="comment-meta">
+                <span class="comment-time"
+                  >{{reply.created_at|naturaltime}}</span
+                >
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+
+      <!-- Loop your Django comments here -->
+    </div>
+
+    <!-- Comment Input -->
+    {% if user.is_authenticated %}
+
+    <form class="popup-comment-form" action="/postComment" method="Post">
+      {% csrf_token %}
+      <input
+        type="text"
+        id="comment"
+        name="comment"
+        placeholder="Add a comment..."
+        required
+      />
+      <input
+        type="hidden"
+        id="postslug"
+        name="postslug"
+        value="{{post.slug}}"
+      />
+      <input type="hidden" name="parentSno" value="" />
+      <button type="submit">Post</button>
+    </form>
+
+    {% else %}
+    <h3>Login To comment on the Post</h3>
+    {% endif %}
+  </div>
+</div>
+<script>
+  function showReplyInput(button) {
+    const wrapper = button.closest(".popup-comment");
+    const replyBox = wrapper.querySelector(".reply-input-wrapper");
+    replyBox.style.display =
+      replyBox.style.display === "none" ? "flex" : "none";
+  }
+  function toggleCommentPopup() {
+    const popup = document.getElementById("commentPopup");
+    popup.style.display = popup.style.display === "flex" ? "none" : "flex";
+  }
+  function handleComment(event) {
+    event.preventDefault();
+    const comment = event.target.comment.value.trim();
+    if (comment) {
+      console.log("New comment:", comment);
+      // Or handle via AJAX
+    }
+  }
+</script>
+
+{% endblock body %}

@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wavely-Social Media App</title>
+    <link rel="stylesheet" href="/assets/styles/style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
+  </head>
+ 
+
+<div class="container" id="container">
+	<div class="form-container sign-up-container">
+		<form action="/signup" method='post'>
+			<h1>Create Account</h1>
+            <div class="social-container">
+				
+			</div>
+			
+			
+			<input type="text" placeholder="Username" id='username' name='username'/>
+			<input type="text" placeholder="First Name" id='fname' name='fname'/>
+			<input type="text" placeholder="Last Name" id='lname' name='lname'/>
+			<input type="password" placeholder="Enter the Password" id='pass1' name='pass1'/>
+			<input type="password" placeholder="Re-Enter the Password" id='pass2' name='pass2'/>
+			<button type='submit'>Sign Up</button>
+            {% csrf_token %}
+		</form>
+	</div>
+	<div class="form-container sign-in-container">
+		<form action="/loginhandle" method='post'>
+			<h1>Sign in</h1>
+			<div class="social-container">
+				
+			</div>
+			
+			<input type="username" placeholder="Username"id='userlogin' name='userlogin' />
+			<input type="password" placeholder="Password" id='pass' name='pass'/>
+			
+			<button action='submit'>Sign In</button>
+            {% csrf_token %}
+		</form>
+	</div>
+	<div class="overlay-container">
+		<div class="overlay">
+			<div class="overlay-panel overlay-left">
+				<h1>Welcome Back!</h1>
+				<p>To keep connected with us please login with your personal info</p>
+				<button class="ghost" id="signIn">Sign In</button>
+			</div>
+			<div class="overlay-panel overlay-right">
+				<h1>Hello, Friend!</h1>
+				<p>Enter your personal details and start journey with us</p>
+				<button class="ghost" id="signUp">Sign Up</button>
+			</div>
+		</div>
+	</div>
+</div>
+{% for i in messages %}
+<div id="wavely-alert" class="wavely-alert alert-{{i.tags}}"> <!-- Change class to alert-warning or alert-error for different colors -->
+  <div class="alert-content">
+    <div class="alert-icon">✓</div>
+    <div class="alert-message">{{i}}</div>
+    <span class="close-alert">&times;</span>
+  </div>
+</div>
+{% endfor %}
+
+
+<style>
+    
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	background: #f6f5f7;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	font-family: 'Montserrat', sans-serif;
+	height: 100vh;
+	margin: -20px 0 50px;
+}
+
+h1 {
+	font-weight: bold;
+	margin: 0;
+}
+
+h2 {
+	text-align: center;
+}
+
+p {
+	font-size: 14px;
+	font-weight: 100;
+	line-height: 20px;
+	letter-spacing: 0.5px;
+	margin: 20px 0 30px;
+}
+
+span {
+	font-size: 12px;
+}
+
+a {
+	color: #333;
+	font-size: 14px;
+	text-decoration: none;
+	margin: 15px 0;
+}
+
+button {
+	border-radius: 20px;
+	border: 1px solid #5827CA;
+	background-color: #5827CA;
+	color: #FFFFFF;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 12px 45px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	transition: transform 80ms ease-in;
+}
+
+button:active {
+	transform: scale(0.95);
+}
+
+button:focus {
+	outline: none;
+}
+
+button.ghost {
+	background-color: transparent;
+	border-color: #FFFFFF;
+}
+
+form {
+	background-color: #FFFFFF;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	padding: 0 50px;
+	height: 100%;
+	text-align: center;
+}
+
+input {
+	background-color: #eee;
+	border: none;
+	padding: 12px 15px;
+	margin: 8px 0;
+	width: 100%;
+}
+
+.container {
+	background-color: #fff;
+	border-radius: 10px;
+  	box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
+			0 10px 10px rgba(0,0,0,0.22);
+	position: relative;
+	overflow: hidden;
+	width: 768px;
+	max-width: 100%;
+	min-height: 480px;
+}
+
+.form-container {
+	position: absolute;
+	top: 0;
+	height: 100%;
+	transition: all 0.6s ease-in-out;
+}
+
+.sign-in-container {
+	left: 0;
+	width: 50%;
+	z-index: 2;
+}
+
+.container.right-panel-active .sign-in-container {
+	transform: translateX(100%);
+}
+
+.sign-up-container {
+	left: 0;
+	width: 50%;
+	opacity: 0;
+	z-index: 1;
+}
+
+.container.right-panel-active .sign-up-container {
+	transform: translateX(100%);
+	opacity: 1;
+	z-index: 5;
+	animation: show 0.6s;
+}
+
+@keyframes show {
+	0%, 49.99% {
+		opacity: 0;
+		z-index: 1;
+	}
+	
+	50%, 100% {
+		opacity: 1;
+		z-index: 5;
+	}
+}
+
+.overlay-container {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	width: 50%;
+	height: 100%;
+	overflow: hidden;
+	transition: transform 0.6s ease-in-out;
+	z-index: 100;
+}
+
+.container.right-panel-active .overlay-container{
+	transform: translateX(-100%);
+}
+
+
+
+.overlay {
+	background: #5827CA;
+background: linear-gradient(135deg, #5827CA, #B584F7);
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: 0 0;
+	color: #FFFFFF;
+	position: relative;
+	left: -100%;
+	height: 100%;
+	width: 200%;
+  	transform: translateX(0);
+	transition: transform 0.6s ease-in-out;
+}
+
+.container.right-panel-active .overlay {
+  	transform: translateX(50%);
+}
+
+.overlay-panel {
+	position: absolute;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	padding: 0 40px;
+	text-align: center;
+	top: 0;
+	height: 100%;
+	width: 50%;
+	transform: translateX(0);
+	transition: transform 0.6s ease-in-out;
+}
+
+.overlay-left {
+	transform: translateX(-20%);
+}
+
+.container.right-panel-active .overlay-left {
+	transform: translateX(0);
+}
+
+.overlay-right {
+	right: 0;
+	transform: translateX(0);
+}
+
+.container.right-panel-active .overlay-right {
+	transform: translateX(20%);
+}
+
+.social-container {
+	margin: 20px 0;
+}
+
+.social-container a {
+	border: 1px solid #DDDDDD;
+	border-radius: 50%;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	margin: 0 5px;
+	height: 40px;
+	width: 40px;
+}
+
+footer {
+    background-color: #222;
+    color: #fff;
+    font-size: 14px;
+    bottom: 0;
+    position: fixed;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 999;
+}
+
+footer p {
+    margin: 10px 0;
+}
+
+footer i {
+    color: red;
+}
+
+footer a {
+    color: #3c97bf;
+    text-decoration: none;
+}
+.wavely-alert {
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 12px;
+  padding: 18px 25px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  color: white;
+  animation: fadeIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  max-width: 90%;
+  width: fit-content;
+  backdrop-filter: blur(5px);
+}
+
+.alert-content {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+.alert-icon {
+  font-size: 24px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.alert-message {
+  font-weight: 500;
+  font-size: 16px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.close-alert {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 22px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 15px;
+  transition: all 0.2s ease;
+  padding: 5px;
+}
+
+.close-alert:hover {
+  color: white;
+  transform: scale(1.1);
+}
+
+/* Color Variants */
+.alert-success {
+  background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+  border-left: 5px solid #1B5E20;
+}
+
+.alert-warning {
+  background: linear-gradient(135deg, #FFC107 0%, #FFA000 100%);
+  border-left: 5px solid #FF6F00;
+  color: #333;
+}
+
+.alert-warning .close-alert {
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.alert-warning .close-alert:hover {
+  color: #000;
+}
+
+.alert-error {
+  background: linear-gradient(135deg, #F44336 0%, #C62828 100%);
+  border-left: 5px solid #B71C1C;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translate(-50%, -45%) scale(0.95); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+}
+
+.wavely-alert {
+  animation: fadeIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+             pulse 2s 0.5s ease-out infinite;
+}
+</style>
+<script>
+    const signUpButton = document.getElementById('signUp');
+const signInButton = document.getElementById('signIn');
+const container = document.getElementById('container');
+
+signUpButton.addEventListener('click', () => {
+	container.classList.add("right-panel-active");
+});
+
+signInButton.addEventListener('click', () => {
+	container.classList.remove("right-panel-active");
+});
+document.addEventListener('DOMContentLoaded', function() {
+  const alert = document.getElementById('wavely-alert');
+  const closeBtn = document.querySelector('.close-alert');
+  
+  // Always show on page load
+  alert.style.display = 'flex';
+  
+  closeBtn.addEventListener('click', function() {
+    alert.style.animation = 'fadeOut 0.3s ease-out';
+    setTimeout(() => {
+      alert.style.display = 'none';
+    }, 300);
+  });
+  
+  // Add fadeOut animation
+  const style = document.createElement('style');
+  style.innerHTML = `
+    @keyframes fadeOut {
+      from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      to { opacity: 0; transform: translate(-50%, -55%) scale(0.95); }
+    }
+  `;
+  document.head.appendChild(style);
+  
+  // Example function to show different alerts
+  window.showAlert = function(type, message) {
+    const alert = document.getElementById('wavely-alert');
+    alert.className = 'wavely-alert alert-' + type;
+    alert.querySelector('.alert-message').textContent = message;
+    
+    // Set appropriate icon
+    const icon = alert.querySelector('.alert-icon');
+    if (type === 'success') icon.textContent = '✓';
+    if (type === 'warning') icon.textContent = '⚠️';
+    if (type === 'error') icon.textContent = '✕';
+    
+    alert.style.display = 'flex';
+    alert.style.animation = 'fadeIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+  };
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

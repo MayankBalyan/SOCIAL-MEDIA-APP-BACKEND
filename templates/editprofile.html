@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% block title %}{{user_info.userprofile.username}} - Wavely{% endblock title %}
+{% block body %}
+<div class="edit-profile-container">
+  <h2 class="edit-profile-header">Edit Profile</h2>
+
+  <form class="edit-profile-form">
+
+    <!-- User Info -->
+    <div class="edit-profile-image-section">
+      <img src="/media/{{user_info.userprofile.image}}" alt="Profile Picture">
+      <div class="edit-profile-image-text">
+        <strong>@ {{user_info.userprofile.username}}</strong>
+        <label for="profile-pic-upload" class="change-photo-link">Change Profile Photo</label>
+        <input type="file" id="profile-pic-upload" style="display: none;">
+      </div>
+    </div>
+
+    <div class="edit-profile-input-group">
+      <label>Username</label>
+      <input type="text" name="username" value="{{user_info.userprofile.username}}">
+    </div>
+
+    <div class="edit-profile-input-group">
+      <label>Bio</label>
+      <textarea rows="3" name="bio" placeholder="Bio"value="{{user_info.userprofile.username}}">crazy</textarea>
+    </div>
+
+    <div class="edit-profile-input-group">
+      <label>Location</label>
+      <input type="text" name="location" placeholder="City, Country"value="{{user_info.userprofile.location}}">
+    </div>
+
+    <div class="edit-profile-input-group">
+      <label>Website</label>
+      <input type="url" name="website" placeholder="https://example.com" value="{{user_info.userprofile.website}}">
+    </div>
+
+    <div class="edit-profile-input-group">
+      <label>Date of Birth</label>
+      <input type="date" name="dob" value="{{user_info.userprofile.date_of_birth}}">
+    </div>
+
+    <div class="edit-profile-checkboxes">
+      <label><input type="checkbox" name="is_private"value="{{user_info.userprofile.is_private}}"> Private Account</label>
+      <label><input type="checkbox" name="is_active" value="{{user_info.userprofile.is_active}}"> Active</label>
+    </div>
+
+    <div class="edit-profile-buttons">
+      <button type="submit" class="btn-save">Save Changes</button>
+      <button type="button" class="btn-cancel">Cancel</button>
+    </div>
+
+  </form>
+</div>
+    <style>
+        body {
+  background-color: #f3f1fa;
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.edit-profile-container {
+  max-width: 600px;
+  margin: 40px auto;
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
+  margin-top:80px;
+}
+
+.edit-profile-header {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 30px;
+  color: #4b2e83;
+}
+
+.edit-profile-image-section {
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.edit-profile-image-section img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 20px;
+}
+
+.edit-profile-image-text {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.change-photo-link {
+  color: #6b46c1;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.edit-profile-input-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.edit-profile-input-group label {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 6px;
+}
+
+.edit-profile-input-group input,
+.edit-profile-input-group textarea {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  background: #f9f9f9;
+}
+
+.edit-profile-checkboxes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.edit-profile-checkboxes label {
+  font-size: 14px;
+  color: #555;
+}
+
+.edit-profile-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.btn-save {
+  background: #6b46c1;
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn-cancel {
+  background: transparent;
+  color: #6b46c1;
+  border: 1px solid #6b46c1;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+    </style>
+
+
+{% endblock body %}

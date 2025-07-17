@@ -1,0 +1,108 @@
+{% load static %}
+{% load extras %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static "/assets/styles/style.css" %}" />
+    
+    <title>{% block title %}{% endblock title %}</title>
+</head>
+<body>
+    <nav>
+    <div class="container">
+        <a href='/' style='text-decoration:none; color:inherit;'><h2 class="logo">Wavely</h2></a>
+
+{% block searchbar %}{% endblock searchbar %}
+        
+
+
+        <div class="create">
+            {% if user.is_authenticated %}
+            <div class="profile-pic">
+                <img src="/media/{{user.userprofile.image}}" alt="logo" />
+            
+                
+            </div>
+            <a href='/createpost/' style='text-decoration:none;color:inherit;'><label class="btn btn-primary" for="create-post">Create</label></a>
+
+            <a href='/logout' style='text-decoration:none;color:inherit;'><label class="btn btn-primary" for="logout">Logout</label></a>
+            {% else %}
+            <a href='/login' style='text-decoration:none;color:inherit;'><label class="btn btn-primary" for="Login">Login</label></a>
+            
+
+
+             {% endif %}
+        </div>
+    </div>
+</nav>
+
+
+    {% block body %}
+
+
+    {% endblock body %}
+    <script>
+// Alert Controller
+document.addEventListener('DOMContentLoaded', function() {
+  const alert = document.getElementById('wavely-alert');
+  const closeBtn = document.querySelector('.close-alert');
+  
+  // Always show on page load
+  alert.style.display = 'flex';
+  
+  closeBtn.addEventListener('click', function() {
+    alert.style.animation = 'fadeOut 0.3s ease-out';
+    setTimeout(() => {
+      alert.style.display = 'none';
+    }, 300);
+  });
+  
+  // Add fadeOut animation
+  const style = document.createElement('style');
+  style.innerHTML = `
+    @keyframes fadeOut {
+      from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      to { opacity: 0; transform: translate(-50%, -55%) scale(0.95); }
+    }
+  `;
+  document.head.appendChild(style);
+  
+  // Example function to show different alerts
+  window.showAlert = function(type, message) {
+    const alert = document.getElementById('wavely-alert');
+    alert.className = 'wavely-alert alert-' + type;
+    alert.querySelector('.alert-message').textContent = message;
+    
+    // Set appropriate icon
+    const icon = alert.querySelector('.alert-icon');
+    if (type === 'success') icon.textContent = '✓';
+    if (type === 'warning') icon.textContent = '⚠️';
+    if (type === 'error') icon.textContent = '✕';
+    
+    alert.style.display = 'flex';
+    alert.style.animation = 'fadeIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+  };
+});
+
+/* Usage examples:
+showAlert('success', 'Your changes were saved!');
+showAlert('warning', 'Please check your input data');
+showAlert('error', 'Failed to connect to server');
+*/
+        
+
+
+</script>
+{% for i in messages %}
+<div id="wavely-alert" class="wavely-alert alert-{{i.tags}}"> <!-- Change class to alert-warning or alert-error for different colors -->
+  <div class="alert-content">
+    <div class="alert-icon">✓</div>
+    <div class="alert-message">{{i}}</div>
+    <span class="close-alert">&times;</span>
+  </div>
+</div>
+{% endfor %}
+</body>
+</html>
